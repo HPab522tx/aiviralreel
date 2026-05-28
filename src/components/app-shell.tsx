@@ -1,0 +1,108 @@
+import { Link, useRouterState } from "@tanstack/react-router";
+import { motion } from "framer-motion";
+import {
+  LayoutDashboard, Upload, Scissors, BarChart3, Flame, Sparkles,
+  Search, Bell, Settings, Wand2,
+} from "lucide-react";
+import type { ReactNode } from "react";
+
+const nav = [
+  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { to: "/upload", label: "Upload", icon: Upload },
+  { to: "/editor", label: "Reel Editor", icon: Scissors },
+  { to: "/analytics", label: "Viral Analytics", icon: BarChart3 },
+  { to: "/trends", label: "Trend Discovery", icon: Flame },
+  { to: "/pricing", label: "Pricing", icon: Sparkles },
+] as const;
+
+export function AppShell({ children, title }: { children: ReactNode; title: string }) {
+  const path = useRouterState({ select: (s) => s.location.pathname });
+
+  return (
+    <div className="min-h-screen flex text-foreground">
+      {/* Sidebar */}
+      <aside className="hidden md:flex w-64 shrink-0 flex-col gap-2 p-4 glass-strong border-r border-white/5 sticky top-0 h-screen">
+        <Link to="/" className="flex items-center gap-2 px-2 py-3">
+          <div className="size-9 rounded-xl bg-gradient-to-br from-cyan-400 via-fuchsia-500 to-violet-500 glow-cyan flex items-center justify-center">
+            <Wand2 className="size-5 text-black" />
+          </div>
+          <div>
+            <div className="font-semibold tracking-tight">ViralReel</div>
+            <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">AI Studio</div>
+          </div>
+        </Link>
+
+        <nav className="mt-4 flex flex-col gap-1">
+          {nav.map((item) => {
+            const Icon = item.icon;
+            const active = path === item.to;
+            return (
+              <Link
+                key={item.to}
+                to={item.to}
+                className={`group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all ${
+                  active ? "bg-white/10 text-white" : "text-muted-foreground hover:text-white hover:bg-white/5"
+                }`}
+              >
+                {active && (
+                  <motion.span
+                    layoutId="active-pill"
+                    className="absolute inset-0 rounded-xl ring-1 ring-cyan-400/40 bg-gradient-to-r from-cyan-400/10 to-fuchsia-500/10"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+                <Icon className="size-4 relative" />
+                <span className="relative">{item.label}</span>
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="mt-auto glass rounded-2xl p-4">
+          <div className="text-xs text-muted-foreground">Render credits</div>
+          <div className="mt-1 text-2xl font-semibold">128 <span className="text-xs text-muted-foreground">/ 500</span></div>
+          <div className="mt-3 h-1.5 rounded-full bg-white/5 overflow-hidden">
+            <div className="h-full w-[26%] bg-gradient-to-r from-cyan-400 to-fuchsia-500" />
+          </div>
+          <Link to="/pricing" className="mt-3 block text-xs text-cyan-300 hover:underline">Upgrade plan →</Link>
+        </div>
+      </aside>
+
+      {/* Main */}
+      <div className="flex-1 min-w-0 flex flex-col">
+        {/* Topbar */}
+        <header className="sticky top-0 z-30 glass-strong border-b border-white/5">
+          <div className="flex items-center gap-3 px-4 md:px-8 h-16">
+            <div>
+              <div className="text-xs text-muted-foreground">Studio</div>
+              <h1 className="text-base font-semibold leading-none">{title}</h1>
+            </div>
+            <div className="ml-6 hidden lg:flex items-center gap-2 glass rounded-xl px-3 py-2 w-80">
+              <Search className="size-4 text-muted-foreground" />
+              <input
+                placeholder="Search reels, trends, sounds…"
+                className="bg-transparent outline-none text-sm flex-1 placeholder:text-muted-foreground"
+              />
+              <kbd className="text-[10px] text-muted-foreground border border-white/10 rounded px-1.5 py-0.5">⌘K</kbd>
+            </div>
+            <div className="ml-auto flex items-center gap-2">
+              <button className="glass rounded-xl p-2 hover:bg-white/10"><Bell className="size-4" /></button>
+              <button className="glass rounded-xl p-2 hover:bg-white/10"><Settings className="size-4" /></button>
+              <div className="size-9 rounded-full bg-gradient-to-br from-fuchsia-500 to-violet-500 ring-2 ring-white/10" />
+            </div>
+          </div>
+        </header>
+
+        <main className="flex-1 px-4 md:px-8 py-6 md:py-8">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+          >
+            {children}
+          </motion.div>
+        </main>
+      </div>
+    </div>
+  );
+}
