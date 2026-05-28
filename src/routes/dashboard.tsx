@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip, BarChart, Bar, CartesianGrid } from "recharts";
-import { Eye, Heart, PlayCircle, Users, Sparkles, ArrowUpRight, Zap, Flame } from "lucide-react";
+import { Eye, Heart, PlayCircle, Users, Sparkles, ArrowUpRight, Zap, Flame, Loader2, CheckCircle2, Clock } from "lucide-react";
+
 import { AppShell } from "../components/app-shell";
 import { StatCard } from "../components/stat-card";
 import { ViralScore } from "../components/viral-score";
@@ -28,15 +29,64 @@ const reels = [
   { name: "Studio gear unboxing", score: 64, views: "210K", platform: "TikTok", thumb: "from-emerald-400/40 to-cyan-400/40" },
 ];
 
+const renders = [
+  { name: "Sunset drone reveal · 4K", status: "rendering", progress: 72, eta: "00:38" },
+  { name: "Coffee shop POV cut · 1080p", status: "queued", progress: 0, eta: "—" },
+  { name: "Studio gear unboxing · 4K", status: "done", progress: 100, eta: "Ready" },
+];
+
+const sparks = {
+  views: [12, 18, 14, 22, 28, 24, 32, 38, 34, 42, 48, 56],
+  eng:   [8, 9, 11, 10, 12, 14, 13, 15, 14, 16, 18, 17],
+  fol:   [60, 62, 64, 63, 66, 70, 72, 75, 78, 80, 82, 84],
+  score: [88, 86, 87, 85, 84, 82, 83, 80, 82, 81, 82, 82],
+};
+
 function Dashboard() {
   return (
     <AppShell title="Dashboard">
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-        <StatCard label="Total views" value="3.42M" delta={18} icon={Eye} accent="cyan" />
-        <StatCard label="Engagement" value="11.8%" delta={6} icon={Heart} accent="magenta" />
-        <StatCard label="Followers" value="84.2K" delta={12} icon={Users} accent="violet" />
-        <StatCard label="Avg. viral score" value="82" delta={-3} icon={Sparkles} accent="cyan" />
+        <StatCard label="Total views" value="3.42M" delta={18} icon={Eye} accent="cyan" trend={sparks.views} />
+        <StatCard label="Engagement" value="11.8%" delta={6} icon={Heart} accent="magenta" trend={sparks.eng} />
+        <StatCard label="Followers" value="84.2K" delta={12} icon={Users} accent="violet" trend={sparks.fol} />
+        <StatCard label="Avg. viral score" value="82" delta={-3} icon={Sparkles} accent="cyan" trend={sparks.score} />
       </div>
+
+      {/* Top performing reel hero */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mt-6 glass-strong rounded-3xl p-6 relative overflow-hidden"
+      >
+        <div className="absolute -top-20 -right-10 size-72 rounded-full bg-fuchsia-500/20 blur-3xl"/>
+        <div className="absolute -bottom-20 -left-10 size-72 rounded-full bg-cyan-400/20 blur-3xl"/>
+        <div className="relative grid lg:grid-cols-[260px_1fr_auto] gap-6 items-center">
+          <div className="aspect-[9/12] rounded-2xl bg-gradient-to-br from-cyan-400/40 to-fuchsia-500/40 ring-1 ring-white/10 relative overflow-hidden max-w-[200px]">
+            <div className="absolute inset-0 ring-grid opacity-30"/>
+            <PlayCircle className="absolute inset-0 m-auto size-12 opacity-90"/>
+            <div className="absolute top-2 left-2 glass rounded-full px-2 py-0.5 text-[10px] inline-flex items-center gap-1"><Flame className="size-3 text-orange-300"/>Top this week</div>
+          </div>
+          <div>
+            <div className="text-xs uppercase tracking-[0.2em] text-cyan-300">Top performing reel</div>
+            <h2 className="mt-1 text-2xl font-semibold">Neon city night ride</h2>
+            <p className="text-sm text-muted-foreground mt-2 max-w-md">Outperforming your last 30 reels by 3.2×. Strong loop rate and share velocity — consider a sequel.</p>
+            <div className="mt-4 grid grid-cols-3 gap-2 max-w-md">
+              {[["Views","1.4M"],["Shares","98K"],["Retention","78%"]].map(([k,v]) => (
+                <div key={k} className="glass rounded-xl p-2 text-center">
+                  <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{k}</div>
+                  <div className="text-sm font-semibold">{v}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="flex flex-col items-center gap-3">
+            <ViralScore score={92} size={140}/>
+            <Link to="/analytics" className="inline-flex items-center gap-1.5 text-xs rounded-xl px-3 py-2 bg-gradient-to-r from-cyan-400 to-fuchsia-500 text-black font-medium">
+              See breakdown <ArrowUpRight className="size-3"/>
+            </Link>
+          </div>
+        </div>
+      </motion.div>
 
       <div className="mt-6 grid grid-cols-1 xl:grid-cols-3 gap-4">
         {/* Retention */}
@@ -75,21 +125,40 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* Viral score widget */}
-        <div className="glass rounded-2xl p-6 flex flex-col items-center">
-          <div className="self-start">
-            <div className="text-xs uppercase tracking-wider text-muted-foreground">Latest reel</div>
-            <h2 className="mt-1 text-lg font-semibold">Neon city night ride</h2>
+        {/* Render queue */}
+        <div className="glass rounded-2xl p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-xs uppercase tracking-wider text-muted-foreground">Render queue</div>
+              <h2 className="mt-1 text-lg font-semibold">Live status</h2>
+            </div>
+            <span className="glass rounded-full px-2 py-1 text-[10px] inline-flex items-center gap-1.5">
+              <span className="size-1.5 rounded-full bg-cyan-400 animate-pulse"/>live
+            </span>
           </div>
-          <div className="my-4"><ViralScore score={92} /></div>
-          <div className="grid grid-cols-3 gap-2 w-full text-center">
-            <div className="glass rounded-xl p-2"><div className="text-[10px] text-muted-foreground">Hook</div><div className="font-semibold">96</div></div>
-            <div className="glass rounded-xl p-2"><div className="text-[10px] text-muted-foreground">Retention</div><div className="font-semibold">88</div></div>
-            <div className="glass rounded-xl p-2"><div className="text-[10px] text-muted-foreground">Loop</div><div className="font-semibold">91</div></div>
+          <div className="mt-4 space-y-3">
+            {renders.map((r) => {
+              const pill = r.status === "rendering"
+                ? { cls: "text-cyan-300", icon: <Loader2 className="size-3 animate-spin"/>, label: "Rendering" }
+                : r.status === "queued"
+                ? { cls: "text-muted-foreground", icon: <Clock className="size-3"/>, label: "Queued" }
+                : { cls: "text-emerald-400", icon: <CheckCircle2 className="size-3"/>, label: "Done" };
+              return (
+                <div key={r.name} className="glass rounded-xl p-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="text-sm font-medium truncate">{r.name}</div>
+                    <span className={`text-[10px] inline-flex items-center gap-1 ${pill.cls}`}>{pill.icon}{pill.label}</span>
+                  </div>
+                  <div className="mt-2 h-1.5 rounded-full bg-white/5 overflow-hidden">
+                    <motion.div animate={{ width: `${r.progress}%` }} className="h-full bg-gradient-to-r from-cyan-400 to-fuchsia-500"/>
+                  </div>
+                  <div className="mt-1 flex items-center justify-between text-[10px] text-muted-foreground">
+                    <span>ETA {r.eta}</span><span>{r.progress}%</span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
-          <Link to="/analytics" className="mt-4 inline-flex items-center gap-1.5 text-xs text-cyan-300 hover:underline">
-            Open analytics <ArrowUpRight className="size-3"/>
-          </Link>
         </div>
       </div>
 
@@ -105,20 +174,21 @@ function Dashboard() {
           </div>
           <div className="mt-4 space-y-3">
             {[
-              { title: "Open with a face close-up", desc: "Reels starting with eye-contact have 24% higher 3s retention in your niche.", tag: "Hook" },
-              { title: "Try the sound 'Midnight Drive' (+312% trend)", desc: "Used by 18 creators you watch. Window closes in ~4 days.", tag: "Sound" },
-              { title: "Post Thursday 7:48pm local", desc: "Your audience peaks at this slot — 1.6× normal CTR.", tag: "Timing" },
+              { title: "Open with a face close-up", desc: "Reels starting with eye-contact have 24% higher 3s retention in your niche.", tag: "Hook", impact: "+12%" },
+              { title: "Try the sound 'Midnight Drive' (+312% trend)", desc: "Used by 18 creators you watch. Window closes in ~4 days.", tag: "Sound", impact: "+28%" },
+              { title: "Post Thursday 7:48pm local", desc: "Your audience peaks at this slot — 1.6× normal CTR.", tag: "Timing", impact: "+18%" },
             ].map((r) => (
               <motion.div whileHover={{ x: 4 }} key={r.title} className="glass rounded-xl p-4 flex items-start gap-3">
                 <div className="size-9 rounded-lg bg-gradient-to-br from-cyan-400/30 to-fuchsia-500/30 flex items-center justify-center"><Zap className="size-4 text-cyan-300"/></div>
                 <div className="flex-1">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
                     <div className="font-medium text-sm">{r.title}</div>
                     <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/5 text-muted-foreground">{r.tag}</span>
+                    <span className="text-[10px] text-emerald-400 font-semibold">{r.impact}</span>
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">{r.desc}</p>
                 </div>
-                <button className="text-xs glass rounded-lg px-3 py-1.5 hover:bg-white/10">Apply</button>
+                <button className="text-xs rounded-lg px-3 py-1.5 bg-gradient-to-r from-cyan-400 to-fuchsia-500 text-black font-medium hover:opacity-90">Apply</button>
               </motion.div>
             ))}
           </div>

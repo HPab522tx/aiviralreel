@@ -1,8 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import {
-  Play, Sparkles, Wand2, Flame, BarChart3, Upload, ArrowRight, Check, Star,
+  Play, Sparkles, Wand2, Flame, BarChart3, Upload, ArrowRight, Check, Star, TrendingUp,
 } from "lucide-react";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -21,7 +23,22 @@ const features = [
   { icon: Sparkles, title: "Smart Recommendations", desc: "Per-platform hooks, hashtags, and timing tuned to your audience." },
 ];
 
+const headline = ["Turn", "raw", "clips", "into"];
+
 function Landing() {
+  const heroRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const blobY1 = useTransform(scrollYProgress, [0, 1], [0, -120]);
+  const blobY2 = useTransform(scrollYProgress, [0, 1], [0, 80]);
+  const mockY = useTransform(scrollYProgress, [0, 1], [0, -40]);
+  const mockRot = useTransform(scrollYProgress, [0, 1], [0, -2]);
+
+  const [score, setScore] = useState(78);
+  useEffect(() => {
+    const t = setInterval(() => setScore((s) => 70 + Math.round(Math.sin(Date.now() / 900) * 12 + 12)), 600);
+    return () => clearInterval(t);
+  }, []);
+
   return (
     <div className="min-h-screen">
       {/* Nav */}
@@ -49,8 +66,27 @@ function Landing() {
       </header>
 
       {/* Hero */}
-      <section className="relative overflow-hidden">
+      <section ref={heroRef} className="relative overflow-hidden">
+        {/* Aurora layers */}
+        <motion.div
+          style={{ y: blobY1 }}
+          className="absolute -top-32 -left-24 size-[36rem] rounded-full bg-cyan-400/25 blur-[140px]"
+          animate={{ scale: [1, 1.1, 1] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          style={{ y: blobY2 }}
+          className="absolute top-20 -right-24 size-[40rem] rounded-full bg-fuchsia-500/25 blur-[160px]"
+          animate={{ scale: [1, 1.15, 1] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+        />
+        <motion.div
+          className="absolute top-1/2 left-1/3 size-[28rem] rounded-full bg-violet-500/20 blur-[140px]"
+          animate={{ x: [0, 60, 0], y: [0, -40, 0] }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+        />
         <div className="absolute inset-0 ring-grid opacity-40 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
+
         <div className="max-w-7xl mx-auto px-6 pt-20 pb-28 relative">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -58,26 +94,72 @@ function Landing() {
             transition={{ duration: 0.6 }}
             className="max-w-3xl"
           >
-            <div className="inline-flex items-center gap-2 glass rounded-full px-3 py-1 text-xs text-muted-foreground">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.1 }}
+              className="inline-flex items-center gap-2 glass rounded-full px-3 py-1 text-xs text-muted-foreground"
+            >
               <span className="size-1.5 rounded-full bg-cyan-400 animate-pulse" />
               New: Viral Score 2.0 — 38% more accurate
-            </div>
+            </motion.div>
+
             <h1 className="mt-6 text-5xl md:text-7xl font-semibold tracking-tight leading-[1.05]">
-              Turn raw clips into
+              {headline.map((w, i) => (
+                <motion.span
+                  key={w + i}
+                  initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  transition={{ duration: 0.5, delay: 0.15 + i * 0.08 }}
+                  className="inline-block mr-3"
+                >
+                  {w}
+                </motion.span>
+              ))}
               <br />
-              <span className="text-gradient">scroll-stopping reels.</span>
+              <motion.span
+                initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                transition={{ duration: 0.6, delay: 0.55 }}
+                className="text-gradient inline-block"
+              >
+                scroll-stopping reels.
+              </motion.span>
             </h1>
-            <p className="mt-6 text-lg text-muted-foreground max-w-xl">
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.7 }}
+              className="mt-6 text-lg text-muted-foreground max-w-xl"
+            >
               ViralReel AI edits, captions, and predicts the virality of your short videos — so you ship what works, not what hopes.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.85 }}
+              className="mt-8 flex flex-wrap items-center gap-3"
+            >
               <Link to="/upload" className="inline-flex items-center gap-2 rounded-xl px-5 py-3 bg-gradient-to-r from-cyan-400 to-fuchsia-500 text-black font-medium glow-magenta hover:opacity-90">
                 <Upload className="size-4" /> Upload your first clip
               </Link>
               <Link to="/dashboard" className="inline-flex items-center gap-2 rounded-xl px-5 py-3 glass hover:bg-white/10">
                 <Play className="size-4" /> Watch 60s demo
               </Link>
-            </div>
+              <motion.div
+                key={score}
+                initial={{ scale: 0.96, opacity: 0.6 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="inline-flex items-center gap-2 glass rounded-full px-3 py-2 text-xs"
+              >
+                <TrendingUp className="size-3.5 text-cyan-300" />
+                <span className="text-muted-foreground">Live viral score</span>
+                <span className="font-semibold text-gradient">{score}</span>
+              </motion.div>
+            </motion.div>
+
             <div className="mt-10 flex items-center gap-4 text-xs text-muted-foreground">
               <div className="flex -space-x-2">
                 {[0,1,2,3].map(i => (
@@ -91,11 +173,25 @@ function Landing() {
             </div>
           </motion.div>
 
+          {/* Trust strip */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1 }}
+            className="mt-12 flex flex-wrap items-center gap-x-10 gap-y-3 text-xs uppercase tracking-[0.2em] text-muted-foreground/70"
+          >
+            <span>As seen in</span>
+            {["TechCrunch", "Wired", "The Verge", "Fast Company", "Product Hunt"].map((n) => (
+              <span key={n} className="font-semibold text-white/40">{n}</span>
+            ))}
+          </motion.div>
+
           {/* Hero mock */}
           <motion.div
+            style={{ y: mockY, rotate: mockRot }}
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
             className="mt-16 relative"
           >
             <div className="glass-strong rounded-3xl p-3 max-w-5xl mx-auto glow-cyan">
@@ -119,14 +215,19 @@ function Landing() {
                     </div>
                   ))}
                 </div>
-                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 size-16 rounded-full bg-white/10 backdrop-blur flex items-center justify-center ring-1 ring-white/20">
+                <motion.div
+                  animate={{ scale: [1, 1.05, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 size-16 rounded-full bg-white/10 backdrop-blur flex items-center justify-center ring-1 ring-white/20"
+                >
                   <Play className="size-6 fill-white" />
-                </div>
+                </motion.div>
               </div>
             </div>
           </motion.div>
         </div>
       </section>
+
 
       {/* Features */}
       <section id="features" className="max-w-7xl mx-auto px-6 py-24">
