@@ -2,18 +2,52 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import {
   LayoutDashboard, Upload, Scissors, BarChart3, Flame, Sparkles,
-  Search, Bell, Settings, Wand2,
+  Search, Bell, Settings, Wand2, Brain, MousePointer2, ImageIcon,
+  Factory, Bot, GitBranch, ShieldAlert, Trophy, Handshake, Layers,
 } from "lucide-react";
-import type { ReactNode } from "react";
+import type { ReactNode, ComponentType } from "react";
 
-const nav = [
-  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/upload", label: "Upload", icon: Upload },
-  { to: "/editor", label: "Reel Editor", icon: Scissors },
-  { to: "/analytics", label: "Viral Analytics", icon: BarChart3 },
-  { to: "/trends", label: "Trend Discovery", icon: Flame },
-  { to: "/pricing", label: "Pricing", icon: Sparkles },
-] as const;
+type NavItem = { to: string; label: string; icon: ComponentType<{ className?: string }>; badge?: "NEW" | "BETA" };
+type NavSection = { title: string; items: NavItem[] };
+
+const sections: NavSection[] = [
+  {
+    title: "Create",
+    items: [
+      { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+      { to: "/upload", label: "Upload", icon: Upload },
+      { to: "/editor", label: "Reel Editor", icon: Scissors },
+      { to: "/factory", label: "Multi-Reel Factory", icon: Factory, badge: "NEW" },
+      { to: "/faceless", label: "Faceless Empire", icon: Bot, badge: "NEW" },
+    ],
+  },
+  {
+    title: "Intelligence",
+    items: [
+      { to: "/clone", label: "Clone Studio", icon: Layers, badge: "NEW" },
+      { to: "/brain", label: "Brain Scanner", icon: Brain, badge: "BETA" },
+      { to: "/scroll-physics", label: "Scroll Physics", icon: MousePointer2, badge: "BETA" },
+      { to: "/thumbnails", label: "Thumbnail Lab", icon: ImageIcon, badge: "NEW" },
+    ],
+  },
+  {
+    title: "Growth",
+    items: [
+      { to: "/analytics", label: "Attention Economy", icon: BarChart3 },
+      { to: "/trends", label: "Trend Discovery", icon: Flame },
+      { to: "/evolution", label: "Reel Evolution", icon: GitBranch, badge: "NEW" },
+      { to: "/shadowban", label: "Shadowban Radar", icon: ShieldAlert, badge: "BETA" },
+      { to: "/leaderboards", label: "Leaderboards", icon: Trophy },
+    ],
+  },
+  {
+    title: "Business",
+    items: [
+      { to: "/deals", label: "Brand Deals", icon: Handshake, badge: "NEW" },
+      { to: "/pricing", label: "Pricing", icon: Sparkles },
+    ],
+  },
+];
 
 export function AppShell({ children, title }: { children: ReactNode; title: string }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
@@ -21,44 +55,56 @@ export function AppShell({ children, title }: { children: ReactNode; title: stri
   return (
     <div className="min-h-screen flex text-foreground">
       {/* Sidebar */}
-      <aside className="hidden md:flex w-64 shrink-0 flex-col gap-2 p-4 glass-strong border-r border-white/5 sticky top-0 h-screen">
+      <aside className="hidden md:flex w-64 shrink-0 flex-col gap-2 p-4 glass-strong border-r border-white/5 sticky top-0 h-screen overflow-y-auto">
         <Link to="/" className="flex items-center gap-2 px-2 py-3">
           <div className="size-9 rounded-xl bg-gradient-to-br from-cyan-400 via-fuchsia-500 to-violet-500 glow-cyan flex items-center justify-center">
             <Wand2 className="size-5 text-black" />
           </div>
           <div>
             <div className="font-semibold tracking-tight">ViralReel</div>
-            <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">AI Studio</div>
+            <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Creator OS</div>
           </div>
         </Link>
 
-        <nav className="mt-4 flex flex-col gap-1">
-          {nav.map((item) => {
-            const Icon = item.icon;
-            const active = path === item.to;
-            return (
-              <Link
-                key={item.to}
-                to={item.to}
-                className={`group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all ${
-                  active ? "bg-white/10 text-white" : "text-muted-foreground hover:text-white hover:bg-white/5"
-                }`}
-              >
-                {active && (
-                  <motion.span
-                    layoutId="active-pill"
-                    className="absolute inset-0 rounded-xl ring-1 ring-cyan-400/40 bg-gradient-to-r from-cyan-400/10 to-fuchsia-500/10"
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                  />
-                )}
-                <Icon className="size-4 relative" />
-                <span className="relative">{item.label}</span>
-              </Link>
-            );
-          })}
+        <nav className="mt-2 flex flex-col gap-4">
+          {sections.map((section) => (
+            <div key={section.title} className="flex flex-col gap-0.5">
+              <div className="px-3 text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70 mb-1">{section.title}</div>
+              {section.items.map((item) => {
+                const Icon = item.icon;
+                const active = path === item.to;
+                return (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    className={`group relative flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition-all ${
+                      active ? "text-white" : "text-muted-foreground hover:text-white hover:bg-white/5"
+                    }`}
+                  >
+                    {active && (
+                      <motion.span
+                        layoutId="active-pill"
+                        className="absolute inset-0 rounded-xl ring-1 ring-cyan-400/40 bg-gradient-to-r from-cyan-400/10 to-fuchsia-500/10"
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                    <Icon className="size-4 relative shrink-0" />
+                    <span className="relative truncate">{item.label}</span>
+                    {item.badge && (
+                      <span className={`relative ml-auto text-[9px] uppercase tracking-wider rounded px-1.5 py-0.5 ${
+                        item.badge === "NEW"
+                          ? "bg-gradient-to-r from-cyan-400 to-fuchsia-500 text-black font-semibold"
+                          : "ring-1 ring-fuchsia-400/40 text-fuchsia-200"
+                      }`}>{item.badge}</span>
+                    )}
+                  </Link>
+                );
+              })}
+            </div>
+          ))}
         </nav>
 
-        <div className="mt-auto glass rounded-2xl p-4">
+        <div className="mt-4 glass rounded-2xl p-4">
           <div className="text-xs text-muted-foreground">Render credits</div>
           <div className="mt-1 text-2xl font-semibold">128 <span className="text-xs text-muted-foreground">/ 500</span></div>
           <div className="mt-3 h-1.5 rounded-full bg-white/5 overflow-hidden">
