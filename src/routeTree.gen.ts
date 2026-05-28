@@ -11,9 +11,19 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UploadRouteImport } from './routes/upload'
 import { Route as TrendsRouteImport } from './routes/trends'
+import { Route as ThumbnailsRouteImport } from './routes/thumbnails'
+import { Route as ShadowbanRouteImport } from './routes/shadowban'
+import { Route as ScrollPhysicsRouteImport } from './routes/scroll-physics'
 import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as LeaderboardsRouteImport } from './routes/leaderboards'
+import { Route as FactoryRouteImport } from './routes/factory'
+import { Route as FacelessRouteImport } from './routes/faceless'
+import { Route as EvolutionRouteImport } from './routes/evolution'
 import { Route as EditorRouteImport } from './routes/editor'
+import { Route as DealsRouteImport } from './routes/deals'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as CloneRouteImport } from './routes/clone'
+import { Route as BrainRouteImport } from './routes/brain'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -27,9 +37,44 @@ const TrendsRoute = TrendsRouteImport.update({
   path: '/trends',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ThumbnailsRoute = ThumbnailsRouteImport.update({
+  id: '/thumbnails',
+  path: '/thumbnails',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShadowbanRoute = ShadowbanRouteImport.update({
+  id: '/shadowban',
+  path: '/shadowban',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ScrollPhysicsRoute = ScrollPhysicsRouteImport.update({
+  id: '/scroll-physics',
+  path: '/scroll-physics',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PricingRoute = PricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeaderboardsRoute = LeaderboardsRouteImport.update({
+  id: '/leaderboards',
+  path: '/leaderboards',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FactoryRoute = FactoryRouteImport.update({
+  id: '/factory',
+  path: '/factory',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FacelessRoute = FacelessRouteImport.update({
+  id: '/faceless',
+  path: '/faceless',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EvolutionRoute = EvolutionRouteImport.update({
+  id: '/evolution',
+  path: '/evolution',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EditorRoute = EditorRouteImport.update({
@@ -37,9 +82,24 @@ const EditorRoute = EditorRouteImport.update({
   path: '/editor',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DealsRoute = DealsRouteImport.update({
+  id: '/deals',
+  path: '/deals',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CloneRoute = CloneRouteImport.update({
+  id: '/clone',
+  path: '/clone',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BrainRoute = BrainRouteImport.update({
+  id: '/brain',
+  path: '/brain',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AnalyticsRoute = AnalyticsRouteImport.update({
@@ -56,18 +116,38 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/analytics': typeof AnalyticsRoute
+  '/brain': typeof BrainRoute
+  '/clone': typeof CloneRoute
   '/dashboard': typeof DashboardRoute
+  '/deals': typeof DealsRoute
   '/editor': typeof EditorRoute
+  '/evolution': typeof EvolutionRoute
+  '/faceless': typeof FacelessRoute
+  '/factory': typeof FactoryRoute
+  '/leaderboards': typeof LeaderboardsRoute
   '/pricing': typeof PricingRoute
+  '/scroll-physics': typeof ScrollPhysicsRoute
+  '/shadowban': typeof ShadowbanRoute
+  '/thumbnails': typeof ThumbnailsRoute
   '/trends': typeof TrendsRoute
   '/upload': typeof UploadRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/analytics': typeof AnalyticsRoute
+  '/brain': typeof BrainRoute
+  '/clone': typeof CloneRoute
   '/dashboard': typeof DashboardRoute
+  '/deals': typeof DealsRoute
   '/editor': typeof EditorRoute
+  '/evolution': typeof EvolutionRoute
+  '/faceless': typeof FacelessRoute
+  '/factory': typeof FactoryRoute
+  '/leaderboards': typeof LeaderboardsRoute
   '/pricing': typeof PricingRoute
+  '/scroll-physics': typeof ScrollPhysicsRoute
+  '/shadowban': typeof ShadowbanRoute
+  '/thumbnails': typeof ThumbnailsRoute
   '/trends': typeof TrendsRoute
   '/upload': typeof UploadRoute
 }
@@ -75,9 +155,19 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/analytics': typeof AnalyticsRoute
+  '/brain': typeof BrainRoute
+  '/clone': typeof CloneRoute
   '/dashboard': typeof DashboardRoute
+  '/deals': typeof DealsRoute
   '/editor': typeof EditorRoute
+  '/evolution': typeof EvolutionRoute
+  '/faceless': typeof FacelessRoute
+  '/factory': typeof FactoryRoute
+  '/leaderboards': typeof LeaderboardsRoute
   '/pricing': typeof PricingRoute
+  '/scroll-physics': typeof ScrollPhysicsRoute
+  '/shadowban': typeof ShadowbanRoute
+  '/thumbnails': typeof ThumbnailsRoute
   '/trends': typeof TrendsRoute
   '/upload': typeof UploadRoute
 }
@@ -86,27 +176,57 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/analytics'
+    | '/brain'
+    | '/clone'
     | '/dashboard'
+    | '/deals'
     | '/editor'
+    | '/evolution'
+    | '/faceless'
+    | '/factory'
+    | '/leaderboards'
     | '/pricing'
+    | '/scroll-physics'
+    | '/shadowban'
+    | '/thumbnails'
     | '/trends'
     | '/upload'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/analytics'
+    | '/brain'
+    | '/clone'
     | '/dashboard'
+    | '/deals'
     | '/editor'
+    | '/evolution'
+    | '/faceless'
+    | '/factory'
+    | '/leaderboards'
     | '/pricing'
+    | '/scroll-physics'
+    | '/shadowban'
+    | '/thumbnails'
     | '/trends'
     | '/upload'
   id:
     | '__root__'
     | '/'
     | '/analytics'
+    | '/brain'
+    | '/clone'
     | '/dashboard'
+    | '/deals'
     | '/editor'
+    | '/evolution'
+    | '/faceless'
+    | '/factory'
+    | '/leaderboards'
     | '/pricing'
+    | '/scroll-physics'
+    | '/shadowban'
+    | '/thumbnails'
     | '/trends'
     | '/upload'
   fileRoutesById: FileRoutesById
@@ -114,9 +234,19 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnalyticsRoute: typeof AnalyticsRoute
+  BrainRoute: typeof BrainRoute
+  CloneRoute: typeof CloneRoute
   DashboardRoute: typeof DashboardRoute
+  DealsRoute: typeof DealsRoute
   EditorRoute: typeof EditorRoute
+  EvolutionRoute: typeof EvolutionRoute
+  FacelessRoute: typeof FacelessRoute
+  FactoryRoute: typeof FactoryRoute
+  LeaderboardsRoute: typeof LeaderboardsRoute
   PricingRoute: typeof PricingRoute
+  ScrollPhysicsRoute: typeof ScrollPhysicsRoute
+  ShadowbanRoute: typeof ShadowbanRoute
+  ThumbnailsRoute: typeof ThumbnailsRoute
   TrendsRoute: typeof TrendsRoute
   UploadRoute: typeof UploadRoute
 }
@@ -137,11 +267,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrendsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/thumbnails': {
+      id: '/thumbnails'
+      path: '/thumbnails'
+      fullPath: '/thumbnails'
+      preLoaderRoute: typeof ThumbnailsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shadowban': {
+      id: '/shadowban'
+      path: '/shadowban'
+      fullPath: '/shadowban'
+      preLoaderRoute: typeof ShadowbanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/scroll-physics': {
+      id: '/scroll-physics'
+      path: '/scroll-physics'
+      fullPath: '/scroll-physics'
+      preLoaderRoute: typeof ScrollPhysicsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pricing': {
       id: '/pricing'
       path: '/pricing'
       fullPath: '/pricing'
       preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/leaderboards': {
+      id: '/leaderboards'
+      path: '/leaderboards'
+      fullPath: '/leaderboards'
+      preLoaderRoute: typeof LeaderboardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/factory': {
+      id: '/factory'
+      path: '/factory'
+      fullPath: '/factory'
+      preLoaderRoute: typeof FactoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faceless': {
+      id: '/faceless'
+      path: '/faceless'
+      fullPath: '/faceless'
+      preLoaderRoute: typeof FacelessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/evolution': {
+      id: '/evolution'
+      path: '/evolution'
+      fullPath: '/evolution'
+      preLoaderRoute: typeof EvolutionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/editor': {
@@ -151,11 +330,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EditorRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/deals': {
+      id: '/deals'
+      path: '/deals'
+      fullPath: '/deals'
+      preLoaderRoute: typeof DealsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/clone': {
+      id: '/clone'
+      path: '/clone'
+      fullPath: '/clone'
+      preLoaderRoute: typeof CloneRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/brain': {
+      id: '/brain'
+      path: '/brain'
+      fullPath: '/brain'
+      preLoaderRoute: typeof BrainRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/analytics': {
@@ -178,9 +378,19 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnalyticsRoute: AnalyticsRoute,
+  BrainRoute: BrainRoute,
+  CloneRoute: CloneRoute,
   DashboardRoute: DashboardRoute,
+  DealsRoute: DealsRoute,
   EditorRoute: EditorRoute,
+  EvolutionRoute: EvolutionRoute,
+  FacelessRoute: FacelessRoute,
+  FactoryRoute: FactoryRoute,
+  LeaderboardsRoute: LeaderboardsRoute,
   PricingRoute: PricingRoute,
+  ScrollPhysicsRoute: ScrollPhysicsRoute,
+  ShadowbanRoute: ShadowbanRoute,
+  ThumbnailsRoute: ThumbnailsRoute,
   TrendsRoute: TrendsRoute,
   UploadRoute: UploadRoute,
 }

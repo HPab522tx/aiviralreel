@@ -15,6 +15,9 @@ export const Route = createFileRoute("/editor")({
 const DURATION = 24; // seconds
 
 function EditorPage() {
+  const [brainrot, setBrainrot] = useState(false);
+  const [beastified, setBeastified] = useState(false);
+
   const [playing, setPlaying] = useState(true);
   const [render, setRender] = useState(0);
   const [zoom, setZoom] = useState(1.2);
@@ -200,7 +203,48 @@ function EditorPage() {
 
         {/* Right panel */}
         <div className="space-y-4">
+          {/* Brainrot + MrBeastify */}
+          <div className={`glass-strong rounded-2xl p-5 relative overflow-hidden ${brainrot ? "holo-border glow-holo" : ""}`}>
+            <div className="absolute -top-12 -right-12 size-32 rounded-full bg-fuchsia-500/30 blur-2xl"/>
+            <div className="relative space-y-4">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <div>
+                  <div className="text-xs uppercase tracking-[0.2em] text-fuchsia-300">Brainrot mode</div>
+                  <div className="text-sm font-semibold">Gen-Z dopamine editing</div>
+                </div>
+                <span
+                  onClick={() => setBrainrot((b) => !b)}
+                  className={`ml-auto relative inline-flex h-6 w-11 rounded-full transition ${brainrot ? "bg-gradient-to-r from-fuchsia-500 to-cyan-400 glow-magenta" : "bg-white/10"}`}
+                >
+                  <motion.span layout className={`absolute top-0.5 size-5 rounded-full bg-white ${brainrot ? "left-[1.4rem]" : "left-0.5"}`}/>
+                </span>
+              </label>
+              {brainrot && (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-wrap gap-1.5 text-[10px]">
+                  {["hyper-zoom","meme pacing","aggressive subs","rapid cuts","dopamine pacing"].map((t) => (
+                    <span key={t} className="glass rounded-full px-2 py-0.5 ring-1 ring-fuchsia-400/40 text-fuchsia-200">{t}</span>
+                  ))}
+                </motion.div>
+              )}
+              <button
+                onClick={() => setBeastified(true)}
+                className="w-full rounded-xl px-4 py-2.5 bg-gradient-to-r from-amber-300 via-fuchsia-500 to-cyan-400 text-black text-sm font-bold glow-holo hover:opacity-90"
+              >
+                ⚡ MrBeastify This Reel
+              </button>
+              {beastified && (
+                <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} className="glass rounded-xl p-3 text-xs space-y-1">
+                  <div className="font-semibold text-cyan-300">Applied 6 optimizations:</div>
+                  {["Stronger 0:00 hook","Cuts every 1.4s","Captions +40% size","More zooms","Higher emotional intensity","Dopamine pacing"].map((s) => (
+                    <div key={s} className="text-muted-foreground">• {s}</div>
+                  ))}
+                </motion.div>
+              )}
+            </div>
+          </div>
+
           {/* Realtime render */}
+
           <div className="glass rounded-2xl p-6">
             <div className="flex items-center justify-between">
               <div>

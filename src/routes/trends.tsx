@@ -1,10 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Flame, TrendingUp, Music, Hash, Sparkles, Eye } from "lucide-react";
+import { Flame, TrendingUp, Music, Hash, Sparkles, Eye, Radar } from "lucide-react";
 import { AppShell } from "../components/app-shell";
+import { RadarSweep } from "../components/radar-sweep";
 
-export const Route = createFileRoute("/trends")({
-  head: () => ({ meta: [{ title: "Trend Discovery — ViralReel AI" }] }),
   component: Trends,
 });
 
