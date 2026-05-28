@@ -76,11 +76,12 @@ function Analytics() {
       </div>
 
       <div className="grid md:grid-cols-4 gap-4">
-        <StatCard label="Views (30d)" value={`${(6.2 * m).toFixed(1)}M`} delta={42} icon={Eye} accent="cyan"/>
-        <StatCard label="Likes" value={`${Math.round(812 * m)}K`} delta={28} icon={Heart} accent="magenta"/>
-        <StatCard label="Comments" value={`${Math.round(54 * m)}K`} delta={11} icon={MessageCircle} accent="violet"/>
-        <StatCard label="Shares" value={`${Math.round(98 * m)}K`} delta={36} icon={Share2} accent="cyan"/>
+        <StatCard label="Attention captured" value={`${(6.2 * m).toFixed(1)}M`} delta={42} icon={Eye} accent="cyan"/>
+        <StatCard label="Attention lost" value={`${Math.round(812 * m)}K`} delta={-12} icon={Heart} accent="magenta"/>
+        <StatCard label="Dopamine score" value={`${Math.round(54 * m)}`} delta={11} icon={MessageCircle} accent="violet"/>
+        <StatCard label="Curiosity retention" value={`${Math.round(78 * m)}%`} delta={36} icon={Share2} accent="cyan"/>
       </div>
+
 
       <div className="mt-6 grid grid-cols-1 xl:grid-cols-3 gap-4">
         <div className="xl:col-span-2 glass rounded-2xl p-6">

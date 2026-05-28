@@ -29,7 +29,28 @@ const hashtags = ["#fyp", "#aiart", "#cinematic", "#nightdrive", "#bts", "#creat
 function Trends() {
   return (
     <AppShell title="Trend Discovery">
+      {/* Future Trend Radar */}
+      <div className="glass-strong holo-border rounded-3xl p-6 mb-4 relative overflow-hidden">
+        <div className="absolute -top-20 -right-10 size-72 rounded-full bg-cyan-400/20 blur-3xl"/>
+        <div className="relative grid lg:grid-cols-[1fr_auto] gap-6 items-center">
+          <div>
+            <div className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-cyan-300">
+              <Radar className="size-3.5"/>Future Trend Prediction Engine
+            </div>
+            <h2 className="mt-2 text-2xl font-semibold">Catch the wave <span className="text-holo">before it crests</span>.</h2>
+            <p className="text-sm text-muted-foreground mt-2 max-w-md">AI scans 12M reels/day to surface formats, memes and creator patterns that will peak in the next 5–14 days.</p>
+            <div className="mt-4 flex flex-wrap gap-2 text-xs">
+              {["Brainrot edits","Loop reveals","AI voice skits","Synthwave drops"].map((t) => (
+                <span key={t} className="glass rounded-full px-3 py-1 ring-1 ring-cyan-400/30 text-cyan-200">{t}</span>
+              ))}
+            </div>
+          </div>
+          <RadarSweep size={280}/>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+
         <div className="xl:col-span-2 space-y-4">
           {/* Trending sounds */}
           <div className="glass rounded-2xl p-6">
