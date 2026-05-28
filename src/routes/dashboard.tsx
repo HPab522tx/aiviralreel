@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip, BarChart, Bar, CartesianGrid } from "recharts";
-import { Eye, Heart, PlayCircle, Users, Sparkles, ArrowUpRight, Zap, Flame, Play, Loader2, CheckCircle2, Clock } from "lucide-react";
+import { Eye, Heart, PlayCircle, Users, Sparkles, ArrowUpRight, Zap, Flame, Loader2, CheckCircle2, Clock } from "lucide-react";
+
 import { AppShell } from "../components/app-shell";
 import { StatCard } from "../components/stat-card";
 import { ViralScore } from "../components/viral-score";
