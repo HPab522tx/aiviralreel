@@ -4,8 +4,11 @@ import { Flame, TrendingUp, Music, Hash, Sparkles, Eye, Radar } from "lucide-rea
 import { AppShell } from "../components/app-shell";
 import { RadarSweep } from "../components/radar-sweep";
 
+export const Route = createFileRoute("/trends")({
+  head: () => ({ meta: [{ title: "Trend Discovery — ViralReel AI" }] }),
   component: Trends,
 });
+
 
 const sounds = [
   { name: "Midnight Drive", artist: "Lo-fi Tape", trend: 312, uses: "184K", peak: "in 4 days", color: "from-cyan-400/40 to-violet-500/40" },
