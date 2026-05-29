@@ -5,8 +5,8 @@ import { AppShell } from "../components/app-shell";
 import { RadarSweep } from "../components/radar-sweep";
 
 export const Route = createFileRoute("/trends")({
-  component: Trends,
   head: () => ({ meta: [{ title: "Trend Discovery — ViralReel AI" }] }),
+  component: Trends,
 });
 
 
