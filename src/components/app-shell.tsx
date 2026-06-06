@@ -152,7 +152,21 @@ export function AppShell({ children, title, requireAuth = true }: { children: Re
             <div className="ml-auto flex items-center gap-2">
               <button className="glass rounded-xl p-2 hover:bg-white/10"><Bell className="size-4" /></button>
               <button className="glass rounded-xl p-2 hover:bg-white/10"><Settings className="size-4" /></button>
-              <div className="size-9 rounded-full bg-gradient-to-br from-fuchsia-500 to-violet-500 ring-2 ring-white/10" />
+              {user && (
+                <button
+                  onClick={async () => { await signOut(); navigate({ to: "/" }); }}
+                  className="glass rounded-xl p-2 hover:bg-white/10"
+                  title={user.email ?? "Sign out"}
+                >
+                  <LogOut className="size-4" />
+                </button>
+              )}
+              <div
+                className="size-9 rounded-full bg-gradient-to-br from-fuchsia-500 to-violet-500 ring-2 ring-white/10 flex items-center justify-center text-xs font-semibold text-black"
+                title={user?.email ?? ""}
+              >
+                {user?.email?.[0]?.toUpperCase() ?? "·"}
+              </div>
             </div>
           </div>
         </header>
