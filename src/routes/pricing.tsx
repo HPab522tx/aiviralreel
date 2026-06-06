@@ -39,7 +39,7 @@ const tiers = [
 function Pricing() {
   const [yearly, setYearly] = useState(true);
   return (
-    <AppShell title="Pricing">
+    <AppShell title="Pricing" requireAuth={false}>
       <div className="max-w-5xl mx-auto">
         <div className="text-center">
           <div className="inline-flex items-center gap-2 glass rounded-full px-3 py-1 text-xs text-muted-foreground">
