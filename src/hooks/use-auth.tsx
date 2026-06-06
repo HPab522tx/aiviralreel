@@ -1,43 +1,41 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { api, setAuthToken, type Me } from "@/services/api";
-import { config } from "@/lib/config";
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import type { Session, User } from "@supabase/supabase-js";
+import { supabase } from "@/integrations/supabase/client";
 
 type AuthState = {
-  user: Me | null;
+  user: User | null;
+  session: Session | null;
   loading: boolean;
-  signIn: (token: string) => Promise<void>;
-  signOut: () => void;
+  signOut: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthState | null>(null);
 
-// Auth-ready provider. When Supabase auth is wired in, swap the body to
-// subscribe to onAuthStateChange and call setAuthToken with the JWT.
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<Me | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const refresh = useCallback(async () => {
-    if (!config.features.auth) return;
-    setLoading(true);
-    try { setUser(await api.me()); }
-    catch { setUser(null); }
-    finally { setLoading(false); }
+  useEffect(() => {
+    // Register listener FIRST so we never miss an event during hydration.
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => {
+      setSession(s);
+      setLoading(false);
+    });
+    // Then read existing session.
+    supabase.auth.getSession().then(({ data }) => {
+      setSession(data.session);
+      setLoading(false);
+    });
+    return () => sub.subscription.unsubscribe();
   }, []);
 
-  useEffect(() => { void refresh(); }, [refresh]);
+  const value = useMemo<AuthState>(() => ({
+    user: session?.user ?? null,
+    session,
+    loading,
+    signOut: async () => { await supabase.auth.signOut(); },
+  }), [session, loading]);
 
-  const signIn = useCallback(async (token: string) => {
-    setAuthToken(token);
-    await refresh();
-  }, [refresh]);
-
-  const signOut = useCallback(() => {
-    setAuthToken(null);
-    setUser(null);
-  }, []);
-
-  const value = useMemo(() => ({ user, loading, signIn, signOut }), [user, loading, signIn, signOut]);
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
