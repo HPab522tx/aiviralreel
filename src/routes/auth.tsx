@@ -151,9 +151,13 @@ function AuthPage() {
   );
 }
 
-function Field({
-  icon: Icon, value, onChange, ...rest
-}: { icon: React.ComponentType<{ className?: string }>; value: string; onChange: (v: string) => void } & React.InputHTMLAttributes<HTMLInputElement>) {
+type FieldProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "value"> & {
+  icon: React.ComponentType<{ className?: string }>;
+  value: string;
+  onChange: (v: string) => void;
+};
+
+function Field({ icon: Icon, value, onChange, ...rest }: FieldProps) {
   return (
     <label className="flex items-center gap-2 rounded-xl border border-white/10 bg-background/40 px-3 py-2 focus-within:border-cyan-400/50">
       <Icon className="size-4 text-muted-foreground" />
