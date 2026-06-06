@@ -1,12 +1,47 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Flame, TrendingUp, Music, Hash, Sparkles, Eye, Radar } from "lucide-react";
+import { Flame, TrendingUp, Music, Hash, Sparkles, Eye, Radar, AlertTriangle } from "lucide-react";
 import { AppShell } from "../components/app-shell";
 import { RadarSweep } from "../components/radar-sweep";
+
+function TrendsError({ error, reset }: { error: Error; reset: () => void }) {
+  console.error(error);
+  const router = useRouter();
+  return (
+    <AppShell title="Trend Discovery">
+      <div className="flex min-h-[60vh] items-center justify-center px-4">
+        <div className="max-w-md w-full text-center glass-strong holo-border rounded-3xl p-8">
+          <div className="mx-auto mb-4 flex size-14 items-center justify-center rounded-full bg-rose-500/10 ring-1 ring-rose-400/30">
+            <AlertTriangle className="size-7 text-rose-300" />
+          </div>
+          <h2 className="text-xl font-semibold">Something went wrong</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            The trend radar hit interference. Try refreshing or head back home.
+          </p>
+          <div className="mt-6 flex flex-wrap justify-center gap-2">
+            <button
+              onClick={() => { router.invalidate(); reset(); }}
+              className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
+            >
+              Try again
+            </button>
+            <a
+              href="/"
+              className="rounded-md border border-input bg-background/40 px-4 py-2 text-sm font-medium hover:bg-accent/20"
+            >
+              Go home
+            </a>
+          </div>
+        </div>
+      </div>
+    </AppShell>
+  );
+}
 
 export const Route = createFileRoute("/trends")({
   head: () => ({ meta: [{ title: "Trend Discovery — ViralReel AI" }] }),
   component: Trends,
+  errorComponent: TrendsError,
 });
 
 
