@@ -1,11 +1,13 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import {
   LayoutDashboard, Upload, Scissors, BarChart3, Flame, Sparkles,
   Search, Bell, Settings, Wand2, Brain, MousePointer2, ImageIcon,
   Factory, Bot, GitBranch, ShieldAlert, Trophy, Handshake, Layers,
+  LogOut, Loader2,
 } from "lucide-react";
-import type { ReactNode, ComponentType } from "react";
+import { useEffect, type ReactNode, type ComponentType } from "react";
+import { useAuth } from "@/hooks/use-auth";
 
 type NavItem = { to: string; label: string; icon: ComponentType<{ className?: string }>; badge?: "NEW" | "BETA" };
 type NavSection = { title: string; items: NavItem[] };
@@ -49,8 +51,24 @@ const sections: NavSection[] = [
   },
 ];
 
-export function AppShell({ children, title }: { children: ReactNode; title: string }) {
+export function AppShell({ children, title, requireAuth = true }: { children: ReactNode; title: string; requireAuth?: boolean }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
+  const navigate = useNavigate();
+  const { user, loading, signOut } = useAuth();
+
+  useEffect(() => {
+    if (requireAuth && !loading && !user) {
+      navigate({ to: "/auth" });
+    }
+  }, [requireAuth, loading, user, navigate]);
+
+  if (requireAuth && (loading || !user)) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-muted-foreground">
+        <Loader2 className="size-5 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex text-foreground">
@@ -134,7 +152,21 @@ export function AppShell({ children, title }: { children: ReactNode; title: stri
             <div className="ml-auto flex items-center gap-2">
               <button className="glass rounded-xl p-2 hover:bg-white/10"><Bell className="size-4" /></button>
               <button className="glass rounded-xl p-2 hover:bg-white/10"><Settings className="size-4" /></button>
-              <div className="size-9 rounded-full bg-gradient-to-br from-fuchsia-500 to-violet-500 ring-2 ring-white/10" />
+              {user && (
+                <button
+                  onClick={async () => { await signOut(); navigate({ to: "/" }); }}
+                  className="glass rounded-xl p-2 hover:bg-white/10"
+                  title={user.email ?? "Sign out"}
+                >
+                  <LogOut className="size-4" />
+                </button>
+              )}
+              <div
+                className="size-9 rounded-full bg-gradient-to-br from-fuchsia-500 to-violet-500 ring-2 ring-white/10 flex items-center justify-center text-xs font-semibold text-black"
+                title={user?.email ?? ""}
+              >
+                {user?.email?.[0]?.toUpperCase() ?? "·"}
+              </div>
             </div>
           </div>
         </header>

@@ -57,7 +57,7 @@ function Landing() {
             <Link to="/pricing" className="hover:text-white">Pricing</Link>
           </nav>
           <div className="ml-auto flex items-center gap-2">
-            <Link to="/dashboard" className="hidden sm:inline-flex text-sm text-muted-foreground hover:text-white px-3 py-2">Sign in</Link>
+            <Link to="/auth" className="hidden sm:inline-flex text-sm text-muted-foreground hover:text-white px-3 py-2">Sign in</Link>
             <Link to="/dashboard" className="inline-flex items-center gap-1.5 text-sm rounded-xl px-4 py-2 bg-gradient-to-r from-cyan-400 to-fuchsia-500 text-black font-medium glow-cyan hover:opacity-90">
               Launch Studio <ArrowRight className="size-3.5" />
             </Link>

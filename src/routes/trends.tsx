@@ -8,7 +8,7 @@ function TrendsError({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
   return (
-    <AppShell title="Trend Discovery">
+    <AppShell title="Trend Discovery" requireAuth={false}>
       <div className="flex min-h-[60vh] items-center justify-center px-4">
         <div className="max-w-md w-full text-center glass-strong holo-border rounded-3xl p-8">
           <div className="mx-auto mb-4 flex size-14 items-center justify-center rounded-full bg-rose-500/10 ring-1 ring-rose-400/30">
@@ -63,7 +63,7 @@ const hashtags = ["#fyp", "#aiart", "#cinematic", "#nightdrive", "#bts", "#creat
 
 function Trends() {
   return (
-    <AppShell title="Trend Discovery">
+    <AppShell title="Trend Discovery" requireAuth={false}>
       {/* Future Trend Radar */}
       <div className="glass-strong holo-border rounded-3xl p-6 mb-4 relative overflow-hidden">
         <div className="absolute -top-20 -right-10 size-72 rounded-full bg-cyan-400/20 blur-3xl"/>
